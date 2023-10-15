@@ -1,0 +1,55 @@
+import smtplib
+from tkinter import *
+
+def send_email():
+    # Get user input
+    recipient = recipient_entry.get()
+    subject = subject_entry.get()
+    body = body_text.get("1.0", END)
+
+    # Set up the SMTP server and send the email
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login('your_email@gmail.com', 'your_password')  # Replace with your email and password
+
+        message = f'Subject: {subject}\n\n{body}'
+
+        server.sendmail('your_email@gmail.com', recipient, message)
+
+        server.quit()
+
+        status_label.config(text="Email sent successfully!", fg="green")
+    except Exception as e:
+        status_label.config(text=f"Error: {e}", fg="red")
+
+# Create the main window
+root = Tk()
+root.title("Email Application")
+
+# Recipient entry
+Label(root, text="Recipient:").grid(row=0, column=0, sticky=W)
+recipient_entry = Entry(root, width=30)
+recipient_entry.grid(row=0, column=1, columnspan=2)
+
+# Subject entry
+Label(root, text="Subject:").grid(row=1, column=0, sticky=W)
+subject_entry = Entry(root, width=30)
+subject_entry.grid(row=1, column=1, columnspan=2)
+
+# Body text
+Label(root, text="Body:").grid(row=2, column=0, sticky=W)
+body_text = Text(root, width=30, height=10)
+body_text.grid(row=2, column=1, columnspan=2)
+
+# Send button
+send_button = Button(root, text="Send Email", command=send_email)
+send_button.grid(row=3, column=0, columnspan=3)
+
+# Status label
+status_label = Label(root, text="", fg="black")
+status_label.grid(row=4, column=0, columnspan=3)
+
+# Run the application
+root.mainloop()
+
